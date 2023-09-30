@@ -1,4 +1,6 @@
+import json
 import logging
+import pprint
 import jsonlines
 import pandas as pd
 
@@ -16,7 +18,13 @@ combined = pd.concat([englishjsonl['id'],englishjsonl['utt'],afjsonl['utt'],engl
 #print(englishjsonl['utt'])
 #print(afjsonl['utt'])
 
-print(combined)
+#print(combined)
 
 
+with open('jsonl_files/en-US-dev.jsonl','r') as jsonl_en:
+    lst = json.load(jsonl_en)
+    #englishjsonl = pd.DataFrame(lst)
+jsonl_en.close()
+print(lst)
+pprint(lst)
 #read tar with gzip compression
