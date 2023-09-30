@@ -3,8 +3,6 @@ import os
 import pandas as pd
 import tarfile
 import logging
-import pprint
-
 
 def extractingFilesFrom_tar_gz(filename):
     tarData = tarfile.open(filename,'r:gz')
@@ -103,8 +101,8 @@ def ttdJSONLGenerator(jsonlExtractedFile):
         #sortedDframe = pd.DataFrame(dRow for dRow in tempDframe.itertuples() if dRow[3] == "test") # includes the index as a column in new dframe
         sortedDframe = tempDframe.loc[tempDframe[colNameToSort] == param]
         sortedDframe.to_json(jsonlstoragepath+'/'+langInitial+'-' + param + '.jsonl', orient='records', lines=True, index=False)
-        pprint(sortedDframe)
-
+        #print(sortedDframe)
+        
 
 deFileName = '1.1/data/de-DE.jsonl'
 swFileName = '1.1/data/sw-KE.jsonl'
