@@ -1,8 +1,11 @@
 import json
 import os
+import jsonlines
 import pandas as pd
 import tarfile
 import logging
+from pprint import pprint
+
 
 def extractingFilesFrom_tar_gz(filename):
     tarData = tarfile.open(filename,'r:gz')
@@ -87,7 +90,7 @@ enCheck = extractedTarfiles.getmember(en_xx_fileName)
 enDataDframe = en_US_DfGenerator()
 #en_XX_fileGenerator()
 
-#q2 
+#q2
 def ttdJSONLGenerator(jsonlExtractedFile):
     tempDframe = tar_jsonlToDframe(jsonlExtractedFile)
     langInitial = tempDframe['locale'][0]
@@ -100,14 +103,55 @@ def ttdJSONLGenerator(jsonlExtractedFile):
     for param in sortingParam:
         #sortedDframe = pd.DataFrame(dRow for dRow in tempDframe.itertuples() if dRow[3] == "test") # includes the index as a column in new dframe
         sortedDframe = tempDframe.loc[tempDframe[colNameToSort] == param]
-        sortedDframe.to_json(jsonlstoragepath+'/'+langInitial+'-' + param + '.jsonl', orient='records', lines=True, index=False)
+        sortedDframe.to_json(jsonlstoragepath+'/' + langInitial + '-' + param + '.jsonl', orient='records', lines=True, index=False, force_ascii = False)
+        createLogs(langInitial+'-' + param + '.jsonl file generated successfully.')
         #print(sortedDframe)
-        
+
 
 deFileName = '1.1/data/de-DE.jsonl'
 swFileName = '1.1/data/sw-KE.jsonl'
 swFile = extractedTarfiles.getmember(swFileName)
 deFile = extractedTarfiles.getmember(deFileName)
-ttdJSONLGenerator(enCheck)
 #ttdJSONLGenerator(enCheck)
-#ttdJSONLGenerator(enCheck)
+#ttdJSONLGenerator(swFile)
+#ttdJSONLGenerator(deFile)
+
+#q2.2
+def uttGenerator():
+    target_extension = '.jsonl'
+    langInitial = enDataDframe['locale'][0]
+    colNameToSort = 'partition'
+    sortingParam = "train"
+
+    filteredDframe = enDataDframe.loc[enDataDframe[colNameToSort] == sortingParam]
+    uttDframe = pd.concat([filteredDframe['id'],filteredDframe['utt']], axis = 1)
+    uttDframe.rename(columns = {'utt': langInitial +'-utt'}, inplace = True)
+    
+    for member in extractedTarfiles.getmembers():
+        if member.name.endswith(target_extension):
+            if not member.isfile() or enCheck is member:
+                continue
+            tempDframe = tar_jsonlToDframe(member)
+            langInitial = tempDframe['locale'][0]
+            filteredDframe = tempDframe.loc[tempDframe[colNameToSort] == sortingParam]
+            uttDframe = pd.concat([uttDframe, filteredDframe['utt']], axis = 1)
+            uttDframe.rename(columns = {'utt': langInitial +'-utt'}, inplace = True)
+
+    #print(uttDframe)
+    jsonlstoragepath = r'C:/Users/ronit/Desktop/Python/CAT1_CompGraphics/jsonl_files'
+    directoryCreater(jsonlstoragepath)
+
+    uttDframe.to_json(jsonlstoragepath+'/en-xx-' + sortingParam + '-filtered.jsonl', orient='records', lines=True, index=False, force_ascii = False)
+    createLogs('en-xx-' + sortingParam + '-filtered.jsonl file generated successfully.')
+
+#uttGenerator()
+
+def preetyprintJsonl():
+    with jsonlines.open('jsonl_files/en-xx-train-filtered.jsonl','r') as jsonl_en:
+        lst = [obj for obj in jsonl_en]
+    #englishjsonl = pd.DataFrame(lst)
+    jsonl_en.close()
+    print(type(lst))
+    pprint(lst)
+    
+preetyprintJsonl()
