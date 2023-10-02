@@ -14,45 +14,45 @@ The involved members include:
 - Download and install [Python](https://www.python.org/downloads/).
 - Create a directory on your Users folder using:
 ```
- - mkdir pyproj
+mkdir pyproj
 ```
 - Within the created folder open Command Prompt or Windows Powershell then create a virtual environment using the code:
-
-`C:\Users\user_name\AppData\Local\Programs\Python\Python311\python.exe -m venv my_env`
-
+```
+C:\Users\user_name\AppData\Local\Programs\Python\Python311\python.exe -m venv my_env
+```
 - Replace "user_name" with the user name of your computer and "my_env" with the name of your choosing.
 - To activate the virtual environment, type in the code:
-
-`my_env\Scripts\activate`
-
+```
+my_env\Scripts\activate
+```
 - Then use the code below to download and install the required packages for your environment:
-
-`pip install -r requirements.txt`
-
+```
+pip install -r requirements.txt
+```
 
 ### Using conda 
 - Download and install [Conda](https://www.anaconda.com/download).
 - Open the Anaconda Command Prompt
 - Create a virtual environment using the code
-
-`conda create --name my_env` 
-
+```
+conda create --name my_env
+```
 - Replace "my_env" with the desired name.
 - To activate the virtual environment, type in the code:
-
-`conda activate compgraph`
-
+```
+conda activate compgraph
+```
 - Then use the code below to download and install the required packages for your environment:
-
-`conda create --name <env_name> --file requirements.txt`
-
+```
+conda create --name <env_name> --file requirements.txt
+```
 ## Cloning from Git
 
 - Install [Git Bash](https://git-scm.com/downloads) and after successful installation open Bash in the directory of the project.
 - In Bash, type 
-
-`git clone https://github.com/Ronit-11/python-data-manipulations.git`
-
+```
+git clone https://github.com/Ronit-11/python-data-manipulations.git
+```
 ## License
 
 MIT License
