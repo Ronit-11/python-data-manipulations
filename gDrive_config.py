@@ -106,3 +106,28 @@ def create_folder(folder_Name):
         except HttpError as error:
             print(F'An error occurred: {error}')
             return None
+
+    def search(mimeType, fileName):
+        """Search file in drive location
+        """
+        # creds, _ = google.auth.default()
+
+        try:
+            # create drive api client
+            service = build('drive', 'v3', credentials=creds)
+            files = []
+            page_token = None
+            while True:
+                # pylint: disable=maybe-no-member
+                response = service.files().list(q="mimeType='" + mimeType + "'",
+                                                spaces='drive',
+                                                fields='nextPageToken, '
+                                                       'files(id, name)',
+                                                pageToken=page_token).execute()
+                # for file in response.get('files', []):
+                # Process change
+                #   print(F'Found file: {file.get("name")}, {file.get("id")}')
+                files.extend(response.get('files', []))
+                page_token = response.get('nextPageToken', None)
+                if page_token is None:
+                    break
