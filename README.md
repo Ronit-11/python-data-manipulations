@@ -13,9 +13,9 @@ The involved members include:
 ### Using pip
 - Download and install [Python](https://www.python.org/downloads/).
 - Create a directory on your Users folder using:
-
-`mkdir pyproj`
-
+```
+ - mkdir pyproj
+```
 - Within the created folder open Command Prompt or Windows Powershell then create a virtual environment using the code:
 
 `C:\Users\user_name\AppData\Local\Programs\Python\Python311\python.exe -m venv my_env`
