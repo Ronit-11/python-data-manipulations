@@ -6,6 +6,8 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from googleapiclient.http import MediaFileUpload
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/drive.metadata',
@@ -78,4 +80,66 @@ def create_folder(folder_Name):
 
     except HttpError as error:
         print(F'An error occurred: {error}')
+        return None
+
+    def upload_to_folder(folder_id, loc_folder_Name, file_Name, file_Type):
+        """Upload a file to the specified folder and prints file ID, folder ID
+        Args: Id of the folder
+        Returns: ID of the file uploaded
+        """
+        # creds, _ = google.auth.default()
+
+        try:
+            # create drive api client
+            service = build('drive', 'v3', credentials=creds)
+
+            file_metadata = {
+                'name': file_Name,
+                'parents': [folder_id]
+            }
+            media = MediaFileUpload((loc_folder_Name + '/' + file_Name),
+                                    mimetype=file_Type, resumable=True)
+            # pylint: disable=maybe-no-member
+            file = service.files().create(body=file_metadata, media_body=media,
+                                          fields='id').execute()
+            print(F'File ID: "{file.get("id")}".')
+            return file.get('id')
+
+        except HttpError as error:
+            print(F'An error occurred: {error}')
+            return None
+
+    def search(mimeType, fileName):
+        """Search file in drive location
+        """
+        # creds, _ = google.auth.default()
+
+        try:
+            # create drive api client
+            service = build('drive', 'v3', credentials=creds)
+            files = []
+            page_token = None
+            while True:
+                # pylint: disable=maybe-no-member
+                response = service.files().list(q="mimeType='" + mimeType + "'",
+                                                spaces='drive',
+                                                fields='nextPageToken, '
+                                                       'files(id, name)',
+                                                pageToken=page_token).execute()
+                # for file in response.get('files', []):
+                # Process change
+                #   print(F'Found file: {file.get("name")}, {file.get("id")}')
+                files.extend(response.get('files', []))
+                page_token = response.get('nextPageToken', None)
+                if page_token is None:
+                    break
+
+        except HttpError as error:
+            print(F'An error occurred: {error}')
+            files = None
+
+        for file in files:
+            if file.get('name') == fileName:
+                return file.get("id")
+
         return None
