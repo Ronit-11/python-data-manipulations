@@ -143,3 +143,37 @@ def create_folder(folder_Name):
                 return file.get("id")
 
         return None
+
+
+def dirFilesUploader(dir_Name, file_Mime):
+    folder_Mime = 'application/vnd.google-apps.folder'
+    folder = None
+
+    folder = search(folder_Mime, dir_Name)
+    if folder == None:
+        folder = create_folder(dir_Name)
+
+    directory = os.fsencode(dir_Name)
+    for file in os.listdir(directory):
+        filename = os.fsdecode(file)
+        # print(os.path.join(directory, filename))
+        files = search(file_Mime, filename)
+        if files == None:
+            upload_to_folder(folder, dir_Name, filename, file_Mime)
+        # print(filename)
+
+
+def main():
+    credentialsSetup()
+
+    xlsx_Mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    dir2_Name = 'Gen_xlsx_files'
+    dirFilesUploader(dir2_Name, xlsx_Mime)
+
+    jsonl_Mime = 'application/jsonl'
+    dir1_Name = 'jsonl_files'
+    dirFilesUploader(dir1_Name, jsonl_Mime)
+
+
+if __name__ == '__main__':
+    main()
