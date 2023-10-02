@@ -131,3 +131,13 @@ def create_folder(folder_Name):
                 page_token = response.get('nextPageToken', None)
                 if page_token is None:
                     break
+                    
+        except HttpError as error:
+            print(F'An error occurred: {error}')
+            files = None
+
+        for file in files:
+            if file.get('name') == fileName:
+                return file.get("id")
+
+        return None
