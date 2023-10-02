@@ -79,3 +79,30 @@ def create_folder(folder_Name):
     except HttpError as error:
         print(F'An error occurred: {error}')
         return None
+
+    def upload_to_folder(folder_id, loc_folder_Name, file_Name, file_Type):
+        """Upload a file to the specified folder and prints file ID, folder ID
+        Args: Id of the folder
+        Returns: ID of the file uploaded
+        """
+        # creds, _ = google.auth.default()
+
+        try:
+            # create drive api client
+            service = build('drive', 'v3', credentials=creds)
+
+            file_metadata = {
+                'name': file_Name,
+                'parents': [folder_id]
+            }
+            media = MediaFileUpload((loc_folder_Name + '/' + file_Name),
+                                    mimetype=file_Type, resumable=True)
+            # pylint: disable=maybe-no-member
+            file = service.files().create(body=file_metadata, media_body=media,
+                                          fields='id').execute()
+            print(F'File ID: "{file.get("id")}".')
+            return file.get('id')
+
+        except HttpError as error:
+            print(F'An error occurred: {error}')
+            return None
