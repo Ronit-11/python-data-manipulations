@@ -82,7 +82,7 @@ def create_folder(folder_Name):
         print(F'An error occurred: {error}')
         return None
 
-    def upload_to_folder(folder_id, loc_folder_Name, file_Name, file_Type):
+def upload_to_folder(folder_id, loc_folder_Name, file_Name, file_Type):
         """Upload a file to the specified folder and prints file ID, folder ID
         Args: Id of the folder
         Returns: ID of the file uploaded
@@ -109,7 +109,7 @@ def create_folder(folder_Name):
             print(F'An error occurred: {error}')
             return None
 
-    def search(mimeType, fileName):
+def search(mimeType, fileName):
         """Search file in drive location
         """
         # creds, _ = google.auth.default()
