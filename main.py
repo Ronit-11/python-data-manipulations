@@ -127,7 +127,7 @@ extractedTarfiles = extractingFilesFrom_tar_gz(rarFileToExtract) #global variabl
 createLogs('Data from zip file extracted successfully.')
 enCheck = extractedTarfiles.getmember(en_xx_fileName)
 enDataDframe = en_US_DfGenerator()
-#en_XX_fileGenerator()
+en_XX_fileGenerator()
 
 deFileName = '1.1/data/de-DE.jsonl'
 swFileName = '1.1/data/sw-KE.jsonl'
