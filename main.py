@@ -77,8 +77,11 @@ def directoryCreater(dirPath):
 
 rarFileToExtract = "amazon-massive-dataset-1.1_CAT1.tar.gz"
 en_xx_fileName = '1.1/data/en-US.jsonl'
-pathToStoreFiles = r'C:/Users/ronit/Desktop/Python/CAT1_CompGraphics/Gen_xlxs_files'
-logDir = r'C:/Users/ronit/Desktop/Python/CAT1_CompGraphics/Logs'
+#pathToStoreFiles = r'C:/Users/ronit/Desktop/Python/CAT1_CompGraphics/Gen_xlsx_files'
+#logDir = r'C:/Users/ronit/Desktop/Python/CAT1_CompGraphics/Logs'
+pathToStoreFiles = 'Gen_xlsx_files'
+jsonlstoragepath = 'jsonl_files'
+logDir = 'Logs'
 directoryCreater(logDir)
 
 logging.basicConfig(filename = "Logs/log.txt", filemode='a', format='%(asctime)s %(levelname)s: %(message)s', level=logging.DEBUG) 
@@ -97,7 +100,7 @@ def ttdJSONLGenerator(jsonlExtractedFile):
     colNameToSort = 'partition'
     sortingParam = ["test", "train", "dev"]
 
-    jsonlstoragepath = r'C:/Users/ronit/Desktop/Python/CAT1_CompGraphics/jsonl_files'
+    #jsonlstoragepath = 'jsonl_files'
     directoryCreater(jsonlstoragepath)
 
     for param in sortingParam:
@@ -138,20 +141,21 @@ def uttGenerator():
             uttDframe.rename(columns = {'utt': langInitial +'-utt'}, inplace = True)
 
     #print(uttDframe)
-    jsonlstoragepath = r'C:/Users/ronit/Desktop/Python/CAT1_CompGraphics/jsonl_files'
+    #jsonlstoragepath = r'C:/Users/ronit/Desktop/Python/CAT1_CompGraphics/jsonl_files'
+    
     directoryCreater(jsonlstoragepath)
 
-    uttDframe.to_json(jsonlstoragepath+'/en-xx-' + sortingParam + '-filtered.jsonl', orient='records', lines=True, index=False, force_ascii = False)
-    createLogs('en-xx-' + sortingParam + '-filtered.jsonl file generated successfully.')
+    uttDframe.to_json(jsonlstoragepath+'/en-xx-' + sortingParam + '-filtered.json', orient='records', index=False, force_ascii = False)
+    createLogs('en-xx-' + sortingParam + '-filtered.json file generated successfully.')
 
-#uttGenerator()
+uttGenerator()
 
 def preetyprintJsonl():
-    with jsonlines.open('jsonl_files/en-xx-train-filtered.jsonl','r') as jsonl_en:
+    with jsonlines.open('jsonl_files/en-xx-train-filtered.json','r') as jsonl_en:
         lst = [obj for obj in jsonl_en]
     #englishjsonl = pd.DataFrame(lst)
     jsonl_en.close()
-    print(type(lst))
+    #print(type(lst))
     pprint(lst)
     
 preetyprintJsonl()
